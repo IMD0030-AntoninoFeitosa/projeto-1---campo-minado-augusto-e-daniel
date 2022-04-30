@@ -9,4 +9,3 @@ exec:
 	./a.out
 execc:
 	./a.out
-	rm *.out
