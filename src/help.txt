@@ -1,0 +1,4 @@
+HELP:
+Para mudar a dificuldade do jogo use o comando -d
+dificuldades: |b, i, a| (beginner, intermediary, advanced)
+Exemplo: a.exe -d b
