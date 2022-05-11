@@ -22,7 +22,11 @@ class Mapa{
 
     int qntRevelados;
 
+    bool perdeu;
+
     public:
+
+    Mapa();
 
     int getBombas();
 
@@ -40,8 +44,8 @@ class Mapa{
 
     void revelaTeste(int i, int j);
     
-    std::string getCelula(int y, int x){
-        return std::to_string(celulas[y][x].getEstado());
+    Celula getCelula(int x, int y){
+        return celulas[y][x];
     }
 
     int getQntRevelados();
@@ -53,6 +57,14 @@ class Mapa{
     int getSizeX(){
         return sizeX;
     }
+
+    void botarBandeira(int x, int y);
+
+    void revelarNumero(int x, int y);
+
+    bool getPerdeu();
+
+    void setPerdeu(bool ent);
 };
 
 #endif

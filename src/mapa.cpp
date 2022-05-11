@@ -1,5 +1,17 @@
 #include "mapa.h"
 
+Mapa::Mapa(){
+    perdeu = false;
+}
+
+bool Mapa::getPerdeu(){
+    return perdeu;
+}
+
+void Mapa::setPerdeu(bool ent){
+    perdeu = perdeu;
+}
+
 int Mapa::getBombas(){
     return qtdBombas;
 }
@@ -9,13 +21,16 @@ void Mapa::addCelula(std::vector<Celula> linha){
 }
 
 bool Mapa::revelarCelula(int x, int y){ 
-    if (celulas[y][x].getRevelado() == false){
+    if (celulas[y][x].getRevelado() == false && celulas[y][x].getMarcada() == false){
         celulas[y][x].revelar();
+        if (celulas[y][x].getEstado() == BOMBA){
+            perdeu = true;
+        }
         qntRevelados++;
     }
     std::vector<std::pair<int, int>> proximos;
 
-    if (celulas[y][x].getEstado() == NADA){
+    if (celulas[y][x].getEstado() == NADA && celulas[y][x].getMarcada() == false){
         if (validar(y-1, x-1) == true){
             if (((celulas[y-1][x-1].getEstado() == NADA) || (celulas[y-1][x-1].getEstado() == NUMERO)) && celulas[y-1][x-1].getRevelado() == false){
                 std::pair<int, int> proximo;
@@ -86,9 +101,9 @@ bool Mapa::revelarCelula(int x, int y){
         }
 
         return true;
-    } else if (celulas[y][x].getEstado() == BOMBA){
+    } else if (celulas[y][x].getEstado() == BOMBA && celulas[y][x].getMarcada() == false){
         return false;
-    } else if (celulas[y][x].getEstado() == NUMERO){
+    } else if (celulas[y][x].getEstado() == NUMERO && celulas[y][x].getMarcada() == false && celulas[y][x].getRevelado() == false){
         if (validar(y-1, x-1) == true){
             if (((celulas[y-1][x-1].getEstado() == NADA)) && celulas[y-1][x-1].getRevelado() == false){
                 std::pair<int, int> proximo;
@@ -303,7 +318,11 @@ std::string Mapa::mostrarMapa(){
                 coord2 = coord2 + 1;
             } else {
                     if (celulas[i][j].getRevelado() == false){
-                    retorno = retorno + "-" + " ";
+                        if (celulas[i][j].getMarcada() == true){
+                            retorno = retorno + "!" + " ";
+                        } else {
+                            retorno = retorno + "-" + " ";
+                        }
                 } else {
                     switch(celulas[i][j].getEstado()){
                         case NADA:
@@ -338,4 +357,102 @@ std::string Mapa::teste(){
 
 int Mapa::getQntRevelados(){
     return qntRevelados;
+}
+
+void Mapa::botarBandeira(int x, int y){
+    if (celulas[y][x].getRevelado() == false){
+        if (celulas[y][x].getMarcada() == false){
+            celulas[y][x].setMarcada(true);
+        } else {
+            celulas[y][x].setMarcada(false);
+        }
+    }
+}
+
+void Mapa::revelarNumero(int x, int y){
+    std::vector<std::pair<int, int>> proximos;
+    
+    if (celulas[y][x].getEstado() == NUMERO && celulas[y][x].getRevelado() == true){
+        int qntBandeiras = 0;
+
+        if (validar(y-1, x-1) == true){
+            if (celulas[y-1][x-1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x-1;
+                proximo.second = y-1;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y-1, x) == true){
+            if (celulas[y-1][x].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x;
+                proximo.second = y-1;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y-1, x+1) == true){
+            if (celulas[y-1][x+1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x+1;
+                proximo.second = y-1;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y, x-1) == true){
+            if (celulas[y][x-1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x-1;
+                proximo.second = y;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y, x+1) == true){
+            if (celulas[y][x+1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x+1;
+                proximo.second = y;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y+1, x-1) == true){
+            if (celulas[y+1][x-1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x-1;
+                proximo.second = y+1;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y+1, x) == true){
+            if (celulas[y+1][x].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x;
+                proximo.second = y+1;
+                proximos.push_back(proximo);
+            }
+        } if (validar(y+1, x+1) == true){
+            if (celulas[y+1][x+1].getMarcada() == true){
+                qntBandeiras++;
+            } else {
+                std::pair<int, int> proximo;
+                proximo.first = x+1;
+                proximo.second = y+1;
+                proximos.push_back(proximo);
+            }
+        }
+
+        if (qntBandeiras == celulas[y][x].getBombasVizinhas()){
+            for (int i = 0; i < proximos.size(); i++){
+                revelarCelula(proximos[i].first, proximos[i].second);
+            }
+        }
+    }
 }

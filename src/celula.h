@@ -14,6 +14,8 @@ class Celula{
 
     int bombasVizinhas;
 
+    bool marcada;
+
     public:
 
     Celula(int ent1);
@@ -31,6 +33,10 @@ class Celula{
     int getBombasVizinhas();
 
     void setBombasVizinhas(int ent);
+    
+    bool getMarcada();
+
+    void setMarcada(bool ent);
 };
 
 #endif

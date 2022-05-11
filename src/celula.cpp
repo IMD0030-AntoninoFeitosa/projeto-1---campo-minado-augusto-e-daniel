@@ -3,6 +3,7 @@
 Celula::Celula(int ent1){
     estado = ent1;
     revelado = false;
+    marcada = false;
 };
 
 int Celula::getEstado(){
@@ -35,4 +36,12 @@ int Celula::getBombasVizinhas(){
 
 void Celula::setBombasVizinhas(int ent){
     bombasVizinhas = ent;
+}
+
+bool Celula::getMarcada(){
+    return marcada;
+}
+
+void Celula::setMarcada(bool ent){
+    marcada = ent;
 }
