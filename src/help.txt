@@ -1,4 +1,16 @@
-HELP:
-Para mudar a dificuldade do jogo use o comando -d
-dificuldades: |b, i, a| (beginner, intermediary, advanced)
-Exemplo: a.exe -d b
+          !BEM-VINDO AO CAMPO MINADO!
+
+O jogo consiste em você revelar todas as bombas que estão
+escondidas pelo mapa. Cada dificuldade possui um tamanho
+de mapa e um número de bombas diferente!
+
+Para mudar a dificuldade do jogo use o comando:
+             -d <b|i|a> ou <beginner | intermediary | advanced>
+Exemplo:    a.exe -d b
+            ./a.out --difficulty advanced
+
+Quando o jogo começar, você sempre poderá realizar 3 ações:
+
+    REVELAR: Revela uma célula, caso seja uma bomba, ENDGAME!
+    MARCAR : Marca uma suposta bomba, caso tenha marcado errado ENDGAME!
+    TEMPO  : Mostra o tempo atual do jogo, termine o mais rápido possível!

@@ -2,6 +2,7 @@
 #include "mapa.h"
 #include <fstream>
 #include <string.h>
+#include <chrono>
 
 int main(int argc, char* argv[]){
     if (argc > 1){
@@ -41,47 +42,61 @@ int main(int argc, char* argv[]){
     std::string acao;
     int loop = 1;
 
+    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
     while (loop == 1){
         char posx, posy;
 
-        for (int i = 0; i < map.getSizeY(); i++){ //colinha pra ver o mapa inteiro
+        /*for (int i = 0; i < map.getSizeY(); i++){ //colinha pra ver o mapa inteiro
                 std::cout << "  ";
                 for (int j = 0; j < map.getSizeX(); j++){
                     std::cout << map.getCelula(j, i).getEstado() << " ";
                 }
                 std::cout << std::endl;
-            }
+            }*/
+        
 
         std::cout << std::endl << map.mostrarMapa() << std::endl;
 
-        std::cout << "escolha uma acao" << std::endl << ">>> ";
+        if (acao == "t"){
+            std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now();
+            std::cout << "Tempo atual: " << std::chrono::duration_cast<std::chrono::seconds>(now - begin).count() << " segundos\n" << std::endl;
+        }
+
+        std::cout << "Escolha uma ação:\nr : Revela uma posição\nb : Marcar uma bomba\nt : Ver o tempo atual do jogo\n" << std::endl << ">>> ";
         std::cin >> acao;
 
-        if (acao == "m"){
-            std::cout << "escolha uma posicao" << std::endl << ">>> ";
+        if (acao == "r"){
+            std::cout << "Escolha a posição [Coluna] [Linha]" << std::endl << ">>> ";
             std::cin >> posx;
             std::cin >> posy;
 
             if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == false){
                     if (map.revelarCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)) == false){
                     std::cout << std::endl << map.mostrarMapa() << std::endl;
-                    std::cout << "BUM" << std::endl;
+                    std::cout << "BUM, VOCÊ PERDEU!" << std::endl;
                     loop = 0;
                 } else if (map.getQntRevelados() == (map.getSizeX() * map.getSizeY() - map.getBombas())){
+
                     std::cout << std::endl << map.mostrarMapa() << std::endl;
-                    std::cout << "Parabens, voce venceu!" << std::endl;
+                    std::cout << "Parabéns, voce venceu!" << std::endl;
+
+                    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+                    std::cout << "Seu tempo foi de: " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << " segundos\n" << std::endl;
+                    int record = std::chrono::duration_cast<std::chrono::seconds>(end - begin).count();
+                    //SaveRecord();
                     loop = 0;
             }
             } else if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == true && map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getEstado() == NUMERO){
                 map.revelarNumero(static_cast<int>(posx-65), static_cast<int>(posy-65));
                 if (map.getPerdeu() == true){
                     std::cout << map.mostrarMapa() << std::endl;
-                    std::cout << "BUM" << std::endl;
+                    std::cout << "BUM, VOCÊ PERDEU" << std::endl;
                     loop = 0;
                 }
             }
         } else if (acao == "b"){
-            std::cout << "escolha uma posicao" << std::endl << ">>> ";
+            std::cout << "Escolha a posição [Coluna] [Linha]" << std::endl << ">>> ";
             std::cin >> posx;
             std::cin >> posy;
 
