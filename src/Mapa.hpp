@@ -1,8 +1,8 @@
-#ifndef mapa
-#define mapa
+#ifndef MAPA_H_
+#define MAPA_H_
 
 #include <vector>
-#include "celula.hpp"
+#include "Celula.hpp"
 #include <string>
 #include <ctime>
 #include <cstdlib>

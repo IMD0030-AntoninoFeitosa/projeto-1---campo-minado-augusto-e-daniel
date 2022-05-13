@@ -2,9 +2,10 @@ all: compile
 
 compile:
 	g++ -c main.cpp
-	g++ -c celula.cpp
-	g++ -c mapa.cpp
-	g++ main.o mapa.o celula.o
+	g++ -c Celula.cpp
+	g++ -c Mapa.cpp
+	g++ -c records.cpp
+	g++ main.o Mapa.o Celula.o records.cpp
 	rm *.o
 exec:
 	./a.out

@@ -1,5 +1,5 @@
-#ifndef celula
-#define celula
+#ifndef CELULA_H_
+#define CELULA_H_
 
 enum estados{
     NADA, BOMBA, NUMERO

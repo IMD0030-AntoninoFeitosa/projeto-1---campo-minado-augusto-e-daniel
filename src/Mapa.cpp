@@ -1,4 +1,4 @@
-#include "mapa.h"
+#include "Mapa.hpp"
 
 Mapa::Mapa(){
     perdeu = false;

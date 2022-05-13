@@ -1,4 +1,4 @@
-#include  "celula.h"
+#include  "Celula.hpp"
 
 Celula::Celula(int ent1){
     estado = ent1;
