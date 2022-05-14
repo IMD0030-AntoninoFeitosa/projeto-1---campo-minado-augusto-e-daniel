@@ -182,7 +182,7 @@ void Mapa::revelaTeste(int j, int i){
     }
 }
 
-bool Mapa::validar(int x, int y){
+bool Mapa::validar(int y, int x){
     if ((x >= 0 && x < sizeX) && (y >= 0 && y <sizeY)){
         return true;
     } else {
@@ -245,42 +245,42 @@ void Mapa::criarMapa(std::string diff){
     for (int i = 0; i < sizeY; i++){
         for (int j = 0; j < sizeX; j++){
             int bombasVizinhas = 0;
-            if (validar(j-1, i-1) == true){
+            if (validar(i-1, j-1) == true){
                 if (celulas[i-1][j-1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j, i-1) == true){
+            if (validar(i-1, j) == true){
                 if (celulas[i-1][j].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j+1, i-1) == true){
+            if (validar(i-1, j+1) == true){
                 if (celulas[i-1][j+1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j-1, i) == true){
+            if (validar(i, j-1) == true){
                 if (celulas[i][j-1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j+1, i) == true){
+            if (validar(i, j+1) == true){
                 if (celulas[i][j+1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j-1, i+1) == true){
+            if (validar(i+1, j-1) == true){
                 if (celulas[i+1][j-1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j, i+1) == true){
+            if (validar(i+1, j) == true){
                 if (celulas[i+1][j].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
             }
-            if (validar(j+1, i+1) == true){
+            if (validar(i+1, j+1) == true){
                 if (celulas[i+1][j+1].getEstado() == BOMBA){
                     bombasVizinhas++;
                 }
@@ -298,10 +298,10 @@ void Mapa::criarMapa(std::string diff){
 std::string Mapa::mostrarMapa(){
     std::string retorno;
 
-    int coord1 = 'A';
+    char coord1 = 'A';
     char coord2 = 'A';
 
-    for (int i = -1; i < sizeY; i++){
+    for (int i = -1; i < sizeX; i++){
         if (i == -1){
             retorno = retorno + "  ";
         } else {

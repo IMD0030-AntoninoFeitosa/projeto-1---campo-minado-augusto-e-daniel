@@ -36,18 +36,19 @@ int main(int argc, char* argv[]){
         } else if(strcmp(argv[1], "-r") || strcmp(argv[1], "--records")){
 
             std::getline(config, diff);
+            readRecordsFile(Records, diff);
 
             if(diff == "b" || diff == "beginner"){
                 std::cout << "LEADERBOARD - BEGINNER" << std::endl;
-                printRecords(RECORDS_FILE_BEGINNER);
+                printRecords(Records);
             }
             else if (diff == "i" || diff == "intermediary"){
                 std::cout << "LEADERBOARD - INTERMEDIARY" << std::endl;
-                printRecords(RECORDS_FILE_INTER);
+                printRecords(Records);
             }
             else if (diff == "a" ||diff == "advanced"){
                 std::cout << "LEADERBOARD - ADVANCED" << std::endl;
-                printRecords(RECORDS_FILE_ADVANCED);
+                printRecords(Records);
             }
             else
                 std::cout << "ERROR 404 - Recordes não foram encontrados!" << std::endl;
@@ -55,11 +56,12 @@ int main(int argc, char* argv[]){
             return 0;
         }
     }
-
+    
     Mapa map;
     std::getline(config, diff);
+    readRecordsFile(Records, diff);
     map.criarMapa(diff);
-
+    
     std::string acao;
     char posx, posy;
     int loop = 1;
@@ -112,7 +114,6 @@ int main(int argc, char* argv[]){
                 std::cout << std::endl;
             }
         
-
         std::cout << std::endl << map.mostrarMapa() << std::endl;
 
         if (acao == "t"){
@@ -139,8 +140,10 @@ int main(int argc, char* argv[]){
                     std::cout << "Parabéns, voce venceu!" << std::endl;
                     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
                     double recordTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-                    std::cout << "Seu tempo foi de: " << recordTime << " segundos\n" << std::endl;
+                    std::cout << "Seu tempo foi de: " << recordTime/1000 << " segundos\n" << std::endl;
                     saveRecord(recordTime, Records);
+                    sortRecords(Records);
+                    writeRecordsFile(Records, diff);
                     loop = 0;
             }
             } else if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == true && map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getEstado() == NUMERO){
@@ -159,13 +162,15 @@ int main(int argc, char* argv[]){
             if (map.validar(static_cast<int>(posy-65), static_cast<int>(posx-65)) == true){
                 map.botarBandeira(static_cast<int>(posx-65), static_cast<int>(posy-65));
             }
-        } else if (acao == "w"){
+        } else if (acao == "hackW"){
             std::cout << std::endl << map.mostrarMapa() << std::endl;
             std::cout << "Parabéns, voce venceu!" << std::endl;
             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
             double recordTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
             std::cout << "Seu tempo foi de: " << recordTime/1000 << " segundos\n" << std::endl;
             saveRecord(recordTime, Records);
+            sortRecords(Records);
+            writeRecordsFile(Records, diff);
             loop = 0;
         }
     }

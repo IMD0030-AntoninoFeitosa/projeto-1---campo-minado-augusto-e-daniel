@@ -1,4 +1,1 @@
-3
-daniel;12
-augusto;12
-rocha;20
+0

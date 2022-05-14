@@ -14,10 +14,18 @@ const std::string RECORDS_FILE_ADVANCED = "records/records_a.txt";
 struct Record
 {
     std::string name;
-    int milliseconds;
+    double milliseconds;
 };
 
-void printRecords(std::string fileDirectory);
+void printRecords(std::vector<Record> &recordsVec);
 
-void saveRecord(double recordTime, std::vector<Record> &RecVec);
+void sortRecords(std::vector<Record> &recordsVec);
+
+void saveRecord(double recordTime, std::vector<Record> &recordsVec);
+
+void readRecordsFile(std::vector<Record> &recordsVec, std::string difficulty);
+
+void writeRecordsFile(std::vector<Record> &recordsVec, std::string difficulty);
+
 #endif
+
