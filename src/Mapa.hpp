@@ -26,11 +26,9 @@ class Mapa{
 
     public:
 
-    Mapa();
-
     int getBombas();
 
-    void criarMapa(std::string diff);
+    void criarMapa(std::string diff, int posx, int posy);
 
     std::string mostrarMapa();
 

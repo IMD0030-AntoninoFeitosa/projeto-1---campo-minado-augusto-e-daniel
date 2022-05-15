@@ -56,52 +56,59 @@ int main(int argc, char* argv[]){
             return 0;
         }
     }
-    
+    system("clear");
+    std::cout <<"              ! BEM-VINDO AO CAMPO MINADO !       \n";
+    std::cout <<"            Para começar a jogar, digite ENTER    \n";
+    std::cout <<"            Para entender como o jogo funciona    \n";
+    std::cout <<"        use --help ou -h como argumento ao iniciar \n";
+    std::cin.ignore();
     Mapa map;
     std::getline(config, diff);
     readRecordsFile(Records, diff);
-    map.criarMapa(diff);
     
-    std::string acao;
+    std::string acao = "";
     char posx, posy;
     int loop = 1;
 
-    std::cout << std::endl << map.mostrarMapa() << std::endl;
-    //Primera ação
+    bool mapaPronto = false;
 
-    std::cout << "Escolha uma ação:\nr : Revela uma posição\nb : Marcar uma bomba\n" << std::endl << ">>> ";
-    std::cin >> acao;
+    Mapa mapaAux;
+    mapaAux.criarMapa(diff, 0, 0);
+    std::cout << mapaAux.mostrarMapa() << std::endl;
 
-    //FEATURE : Função para selecionar ação no Mapa;
-    if (acao == "r"){
-            std::cout << "Escolha a posição [Coluna] [Linha]" << std::endl << ">>> ";
-            std::cin >> posx;
-            std::cin >> posy;
+    
 
-            if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == false){
-                if (map.revelarCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)) == false){
-                    std::cout << std::endl << map.mostrarMapa() << std::endl;
-                    std::cout << "BUM, VOCÊ PERDEU!" << std::endl;
-                    loop = 0;
-                } 
-            } else if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == true && map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getEstado() == NUMERO){
-                map.revelarNumero(static_cast<int>(posx-65), static_cast<int>(posy-65));
-                if (map.getPerdeu() == true){
-                    std::cout << map.mostrarMapa() << std::endl;
-                    std::cout << "BUM, VOCÊ PERDEU" << std::endl;
-                    loop = 0;
+    while(acao != "r"){
+        std::cout << "Escolha uma ação:\nr : Revela uma posição\n" << std::endl << ">>> ";
+        std::cin >> acao;
+
+        if (acao == "r"){
+                std::cout << "Escolha a posição [Coluna] [Linha]" << std::endl << ">>> ";
+                std::cin >> posx;
+                std::cin >> posy;
+
+                if (mapaPronto == false){
+                    map.criarMapa(diff, static_cast<int>(posx-65), static_cast<int>(posy-65));
+                    mapaPronto = true;
+                }
+
+                if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == false){
+                    if (map.revelarCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)) == false){
+                        std::cout << std::endl << map.mostrarMapa() << std::endl;
+                        std::cout << "BUM, VOCÊ PERDEU!" << std::endl;
+                        loop = 0;
+                    } 
+                } else if (map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getRevelado() == true && map.getCelula(static_cast<int>(posx-65), static_cast<int>(posy-65)).getEstado() == NUMERO){
+                    map.revelarNumero(static_cast<int>(posx-65), static_cast<int>(posy-65));
+                    if (map.getPerdeu() == true){
+                        std::cout << map.mostrarMapa() << std::endl;
+                        std::cout << "BUM, VOCÊ PERDEU" << std::endl;
+                        loop = 0;
+                    }
                 }
             }
-        } else if (acao == "b"){
-            std::cout << "Escolha a posição [Coluna] [Linha]" << std::endl << ">>> ";
-            std::cin >> posx;
-            std::cin >> posy;
+    }
 
-            if (map.validar(static_cast<int>(posy-65), static_cast<int>(posx-65)) == true){
-                map.botarBandeira(static_cast<int>(posx-65), static_cast<int>(posy-65));
-            }
-        }
-        
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
     while(loop == 1){
@@ -162,7 +169,7 @@ int main(int argc, char* argv[]){
             if (map.validar(static_cast<int>(posy-65), static_cast<int>(posx-65)) == true){
                 map.botarBandeira(static_cast<int>(posx-65), static_cast<int>(posy-65));
             }
-        } else if (acao == "hackW"){
+        } else if (acao == "hackW"){ // APENAS PARA TESTES!
             std::cout << std::endl << map.mostrarMapa() << std::endl;
             std::cout << "Parabéns, voce venceu!" << std::endl;
             std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

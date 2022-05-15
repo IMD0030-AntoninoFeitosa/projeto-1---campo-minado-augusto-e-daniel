@@ -1,9 +1,5 @@
 #include "Mapa.hpp"
 
-Mapa::Mapa(){
-    perdeu = false;
-}
-
 bool Mapa::getPerdeu(){
     return perdeu;
 }
@@ -23,14 +19,12 @@ void Mapa::addCelula(std::vector<Celula> linha){
 bool Mapa::revelarCelula(int x, int y){ 
     if (celulas[y][x].getRevelado() == false && celulas[y][x].getMarcada() == false){
         celulas[y][x].revelar();
-        if (celulas[y][x].getEstado() == BOMBA){
-            perdeu = true;
-        }
         qntRevelados++;
     }
     std::vector<std::pair<int, int>> proximos;
 
     if (celulas[y][x].getEstado() == NADA && celulas[y][x].getMarcada() == false){
+
         if (validar(y-1, x-1) == true){
             if (((celulas[y-1][x-1].getEstado() == NADA) || (celulas[y-1][x-1].getEstado() == NUMERO)) && celulas[y-1][x-1].getRevelado() == false){
                 std::pair<int, int> proximo;
@@ -190,7 +184,7 @@ bool Mapa::validar(int y, int x){
     }
 }
 
-void Mapa::criarMapa(std::string diff){
+void Mapa::criarMapa(std::string diff, int posx, int posy){
     unsigned seed = time(0);
     srand(seed);
     qtdBombas = 0;
@@ -214,14 +208,46 @@ void Mapa::criarMapa(std::string diff){
         std::vector<Celula> linha;
         for (int j = 0 ; j < sizeX; j++){
             int val = rand()%11;
-            if (val == 1 && qtdBombas < maxBombas){
+            bool protegida;
+            if (i == posy && j == posx && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy-1 && posx-1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy-1 && posx && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy-1 && posx+1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy && posx-1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy && posx+1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy+1 && posx-1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy+1 && posx && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (i == posy+1 && posx+1 && diff == "intermediary"){
+                val = 0;
+                protegida = true;
+            } else if (val == 1 && qtdBombas < maxBombas){
                 qtdBombas++;
+                protegida = false;
             } else if (val == 1 && qtdBombas >= maxBombas){
                 val = 0;
+                protegida = false;
             } else if (val != 0 && val != 1){
                 val = 0;
+                protegida = false;
             }
-            Celula entrada(val);
+
+            Celula entrada(val, protegida);
             entrada.setBombasVizinhas(0);
             linha.push_back(entrada);
         }
@@ -233,7 +259,54 @@ void Mapa::criarMapa(std::string diff){
             for (int i = 0; i < sizeY; i++){
                 for (int j = 0; j < sizeX; j++){
                     int val = rand()%11;
-                    if (celulas[i][j].getEstado() == NADA && (val == 1 && qtdBombas < maxBombas)){
+                    if (i == posy && j == posx){
+                        int val2 = rand()%8;
+                        celulas[i][j].setEstado(NADA);
+                        std::cout << val2 << std::endl;
+                        switch (val2){
+                            case 0:
+                            if (validar(i-1, j-1) == true){
+                                celulas[i-1][j-1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 1:
+                            if (validar(i-1, j) == true){
+                                celulas[i-1][j].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 2:
+                            if (validar(i-1, j+1) == true){
+                                celulas[i-1][j+1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 3:
+                            if (validar(i, j-1) == true){
+                                celulas[i][j-1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 4:
+                            if (validar(i, j+1) == true){
+                                celulas[i][j+1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 5:
+                            if (validar(i+1, j-1) == true){
+                                celulas[i+1][j-1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 6:
+                            if (validar(i+1, j) == true){
+                                celulas[i+1][j].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                            case 7:
+                            if (validar(i+1, j+1) == true){
+                                celulas[i+1][j+1].setEstado(BOMBA);
+                                qtdBombas++;
+                            } break;
+                        }
+                    }
+                    else if (celulas[i][j].getEstado() == NADA && (val == 1 && qtdBombas < maxBombas) && celulas[i][j].isProtegida() == false){
                         celulas[i][j].setEstado(BOMBA);
                         qtdBombas++;
                     }
@@ -297,7 +370,7 @@ void Mapa::criarMapa(std::string diff){
 
 std::string Mapa::mostrarMapa(){
     std::string retorno;
-
+    system("clear");
     char coord1 = 'A';
     char coord2 = 'A';
 

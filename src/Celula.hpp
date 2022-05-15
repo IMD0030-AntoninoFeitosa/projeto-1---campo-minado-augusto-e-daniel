@@ -16,9 +16,11 @@ class Celula{
 
     bool marcada;
 
+    bool protegida;
+
     public:
 
-    Celula(int ent1);
+    Celula(int ent1, bool protegida);
 
     int getEstado();
 
@@ -37,6 +39,10 @@ class Celula{
     bool getMarcada();
 
     void setMarcada(bool ent);
+
+    bool isProtegida();
+
+    void setProtegida(bool ent);
 };
 
 #endif

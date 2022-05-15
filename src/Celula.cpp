@@ -1,9 +1,10 @@
 #include  "Celula.hpp"
 
-Celula::Celula(int ent1){
+Celula::Celula(int ent1, bool ent2){
     estado = ent1;
     revelado = false;
     marcada = false;
+    protegida = ent2;
 };
 
 int Celula::getEstado(){
@@ -44,4 +45,12 @@ bool Celula::getMarcada(){
 
 void Celula::setMarcada(bool ent){
     marcada = ent;
+}
+
+bool Celula::isProtegida(){
+    return protegida;
+}
+
+void Celula::setProtegida(bool ent){
+    protegida = ent;
 }
